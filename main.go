@@ -26,6 +26,7 @@ type Director struct {
 var movies []Movie
 
 func getMovies(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("✅ [GET] getMovies request sent...")
 	w.Header().Set("Content-Type", "application/json")
 	err := json.NewEncoder(w).Encode(movies)
 	if err != nil {
@@ -35,6 +36,7 @@ func getMovies(w http.ResponseWriter, r *http.Request) {
 }
 
 func deleteMovie(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("✅ [DELETE] deleteMovie request sent...")
 	w.Header().Set("Content-Type", "application/json")
 
 	params := mux.Vars(r)
@@ -55,6 +57,7 @@ func deleteMovie(w http.ResponseWriter, r *http.Request) {
 }
 
 func getMovie(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("✅ [GET] getMovie request sent...")
 	w.Header().Set("Content-Type", "application/json")
 
 	params := mux.Vars(r)
@@ -72,6 +75,7 @@ func getMovie(w http.ResponseWriter, r *http.Request) {
 }
 
 func createMovie(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("✅ [POST] createMovie request sent...")
 	w.Header().Set("Content-Type", "application/json")
 
 	var movie Movie
@@ -85,6 +89,22 @@ func createMovie(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal("❌ JSON encoding error:", err)
 		return
+	}
+}
+
+func updateMovie(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("✅ [PUT] updateMovie request sent...")
+	w.Header().Set("Content-Type", "application/json")
+
+	params := mux.Vars(r)
+
+	for index, item := range movies {
+		if item.ID == params["id"] {
+			// delete move with the ID user has sent
+			movies = append(movies[:index], movies[index+1:]...)
+
+			createMovie(w, r)
+		}
 	}
 }
 
