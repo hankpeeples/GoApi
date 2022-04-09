@@ -44,6 +44,29 @@ func deleteMovie(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 	}
+	// return remaining movies
+	err := json.NewEncoder(w).Encode(movies)
+	if err != nil {
+		log.Fatal("❌ JSON encoding error:", err)
+		return
+	}
+}
+
+func getMovie(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	params := mux.Vars(r)
+
+	for _, item := range movies {
+		if item.ID == params["id"] {
+			err := json.NewEncoder(w).Encode(item)
+			if err != nil {
+				log.Fatal("❌ JSON encoding error:", err)
+				return
+			}
+			return
+		}
+	}
 }
 
 func main() {
