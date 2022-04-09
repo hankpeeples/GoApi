@@ -43,6 +43,7 @@ func deleteMovie(w http.ResponseWriter, r *http.Request) {
 
 	for index, item := range movies {
 		if item.ID == params["id"] {
+			fmt.Println("\tDeleting movie with ID:", item.ID)
 			// remove item by appending all other data in its place
 			movies = append(movies[:index], movies[index+1:]...)
 			break
@@ -69,6 +70,7 @@ func getMovie(w http.ResponseWriter, r *http.Request) {
 				log.Fatal("❌ JSON encoding error:", err)
 				return
 			}
+			fmt.Println("\tFound movie with ID:", item.ID)
 			return
 		}
 	}
@@ -90,6 +92,8 @@ func createMovie(w http.ResponseWriter, r *http.Request) {
 		log.Fatal("❌ JSON encoding error:", err)
 		return
 	}
+
+	fmt.Println("\tCreated movie with ID:", movie.ID)
 }
 
 func updateMovie(w http.ResponseWriter, r *http.Request) {
@@ -100,6 +104,7 @@ func updateMovie(w http.ResponseWriter, r *http.Request) {
 
 	for index, item := range movies {
 		if item.ID == params["id"] {
+			fmt.Println("\tUpdating movie with ID:", item.ID)
 			// delete move with the ID user has sent
 			movies = append(movies[:index], movies[index+1:]...)
 
